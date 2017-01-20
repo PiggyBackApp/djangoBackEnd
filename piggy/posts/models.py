@@ -19,6 +19,6 @@ class Post(models.Model):
         # TODO: link creator
         origin = models.CharField(max_length=255)
         destination = models.CharField(max_length=255)
-        emptySeats = models.IntegerField()
-        passengerCapacity = models.IntegerField()
-        status = models.CharField(max_length=20,choices=statuses)
+        emptySeats = models.IntegerField(blank=True, null=True)
+        passengerCapacity = models.IntegerField(blank=True, null=True)
+        status = models.CharField(max_length=20,choices=statuses, blank=True)
