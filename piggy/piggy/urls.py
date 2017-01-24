@@ -18,11 +18,13 @@ from django.contrib import admin
 # REST STUFF:
 from rest_framework import routers
 # VIEWS:
-from posts import views
+from posts import views as postsViews
+from customUsers import views as customUsersViews
 
 router = routers.DefaultRouter()
 #makes sure that the API endpoints work
-router.register(r'api/posts', views.PostViewSet)
+router.register(r'api/posts', postsViews.PostViewSet)
+router.register(r'api/customUsers', customUsersViews.CustomUserViewSet)
 admin.autodiscover()
 
 
