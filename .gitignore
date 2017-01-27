@@ -1,1 +1,7 @@
+# GIT IGNORE FILES
+
+# macOS hidden files
 .DS_Store
+
+# python .pyc files
+*.pyc
