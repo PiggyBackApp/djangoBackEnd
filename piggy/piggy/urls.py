@@ -21,6 +21,8 @@ from rest_framework import routers
 from posts import views as postsViews
 from customUsers import views as customUsersViews
 
+from rest_framework.authtoken import views as authViews
+
 router = routers.DefaultRouter()
 #makes sure that the API endpoints work
 router.register(r'api/posts', postsViews.PostViewSet)
@@ -32,4 +34,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api-token-auth/', authViews.obtain_auth_token),
+
 ]

@@ -6,7 +6,10 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 
 from customUsers.models import CustomUser
+from rest_framework.authtoken.admin import TokenAdmin
 
+
+TokenAdmin.raw_id_fields = ('user',)
 # Define an inline admin descriptor for Employee model
 # which acts a bit like a singleton
 class CustomUserInline(admin.StackedInline):
