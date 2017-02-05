@@ -9,15 +9,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'email', 'username', 'password')
-        # TODO: HASH THE PASSWORD
-    # def create(self, validated_data):
-    #     user = User(
-    #         email=validated_data['email'],
-    #         username=validated_data['username']
-    #     )
-    #     user.set_password(make_password(validated_data['password']))
-    #     user.save()
-    #     return user
 
 class CustomUserSerializer(serializers.HyperlinkedModelSerializer):
     user = UserSerializer(required=True);
@@ -25,7 +16,9 @@ class CustomUserSerializer(serializers.HyperlinkedModelSerializer):
         model = CustomUser
         fields = ('user', 'rating', 'school', 'car', 'phoneNumber')
     def create(self, validated_data):
+        # create method is overriden to create user in django users table and also make sure password is hashed
         user_data = validated_data.pop('user')
+        user_data['password'] = make_password(user_data['password'])
         newUser = User.objects.create(**user_data)
         customUser = CustomUser.objects.create(user=newUser, **validated_data)
         return customUser
