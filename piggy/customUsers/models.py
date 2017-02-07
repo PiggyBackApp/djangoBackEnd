@@ -19,6 +19,9 @@ class CustomUser(models.Model):
     car = models.CharField(max_length=255)
     phoneNumber = models.CharField(max_length=10)
 
+    def __str__(self):
+        return self.user.username
+
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
