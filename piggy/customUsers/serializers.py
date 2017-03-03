@@ -14,7 +14,7 @@ class CustomUserSerializer(serializers.HyperlinkedModelSerializer):
     user = UserSerializer(required=True);
     class Meta:
         model = CustomUser
-        fields = ('user', 'rating', 'school', 'car', 'phoneNumber')
+        fields = ('id', 'user', 'rating', 'school', 'car', 'phoneNumber')
     def create(self, validated_data):
         # create method is overriden to create user in django users table and also make sure password is hashed
         user_data = validated_data.pop('user')
