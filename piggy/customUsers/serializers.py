@@ -1,3 +1,4 @@
+from django.db.models import Avg
 from customUsers.models import CustomUser
 from rest_framework import serializers
 from django.contrib.auth.models import User
@@ -11,10 +12,23 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('first_name', 'last_name', 'email', 'username', 'password')
 
 class CustomUserSerializer(serializers.ModelSerializer):
-    user = UserSerializer(required=True);
+    reviews = serializers.PrimaryKeyRelatedField(
+        many=True,
+        read_only=True,
+    )
+    average_rating = serializers.SerializerMethodField()
+    user = UserSerializer(required=True)
     class Meta:
+        fields = ('id', 'user', 'rating', 'school', 'car', 'phoneNumber', 'reviews', 'average_rating' )
         model = CustomUser
-        fields = ('id', 'user', 'rating', 'school', 'car', 'phoneNumber')
+
+    def get_average_rating(self, obj):
+        average = obj.reviews.aggregate(Avg('rating')).get('rating__avg')
+        if average is None:
+            return 0
+
+        return round(average*2) / 2
+
     def create(self, validated_data):
         # create method is overriden to create user in django users table and also make sure password is hashed
         user_data = validated_data.pop('user')

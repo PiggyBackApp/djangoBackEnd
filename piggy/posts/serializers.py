@@ -1,4 +1,6 @@
 from posts.models import Post
+from posts.models import Request
+from posts.models import Review
 from customUsers.models import CustomUser
 from rest_framework import serializers
 
@@ -27,3 +29,26 @@ class PostSerializer(serializers.ModelSerializer):
         # print user.user.username
         # return user.username
         return user.user.username
+
+class RequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Request
+        fields = (
+            'id',
+            'driver',
+            'passenger',
+            'post'
+        )
+
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = (
+            'id',
+            'reviewee',
+            'reviewer',
+            'request',
+            'created_at',
+            'rating',
+            'comment'
+        )

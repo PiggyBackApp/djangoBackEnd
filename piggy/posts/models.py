@@ -28,7 +28,16 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-#
-# class Review(models.Model):
-#     reviewer = models.ForeignKey('customUsers.CustomUser')
-#     reviewee = models.ForeignKey('customUsers.CustomUser')
+
+class Request(models.Model):
+    driver = models.ForeignKey('customUsers.CustomUser', related_name='driver')
+    passenger = models.ForeignKey('customUsers.CustomUser', related_name='passenger')
+    post = models.ForeignKey(Post, related_name='post')
+
+class Review(models.Model):
+    reviewee = models.ForeignKey('customUsers.CustomUser', related_name='reviews')
+    reviewer = models.ForeignKey('customUsers.CustomUser')
+    request = models.OneToOneField(Request, related_name='requests')
+    created_at = models.DateTimeField(auto_now_add=True)
+    rating = models.IntegerField()
+    comment = models.TextField(blank=True, default='')
