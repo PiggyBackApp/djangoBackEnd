@@ -31,14 +31,45 @@ class PostSerializer(serializers.ModelSerializer):
         return user.user.username
 
 class RequestSerializer(serializers.ModelSerializer):
+    driver_username = serializers.SerializerMethodField()
+    passenger_username = serializers.SerializerMethodField()
+    origin = serializers.SerializerMethodField()
+    destination = serializers.SerializerMethodField()
+    travelDate = serializers.SerializerMethodField()
     class Meta:
         model = Request
         fields = (
             'id',
             'driver',
             'passenger',
-            'post'
+            'post',
+            'driver_username',
+            'passenger_username',
+            'origin',
+            'destination',
+            'travelDate'
         )
+        
+    def get_driver_username(self, obj):
+        user = CustomUser.objects.get(id=obj.driver.id)
+        return user.user.username
+
+    def get_passenger_username(self, obj):
+        user = CustomUser.objects.get(id=obj.passenger.id)
+        return user.user.username
+
+    def get_origin(self, obj):
+        post = Post.objects.get(id=obj.post.id)
+        return post.origin
+
+    def get_destination(self, obj):
+        post = Post.objects.get(id=obj.post.id)
+        return post.destination
+
+    def get_travelDate(self, obj):
+        post = Post.objects.get(id=obj.post.id)
+        return post.travelDate
+
 
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:

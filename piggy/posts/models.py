@@ -30,6 +30,7 @@ class Post(models.Model):
 
 
 class Request(models.Model):
+    # TODO: Find a way to check that duplicate requests were not made
     driver = models.ForeignKey('customUsers.CustomUser', related_name='driver')
     passenger = models.ForeignKey('customUsers.CustomUser', related_name='passenger')
     post = models.ForeignKey(Post, related_name='post')
