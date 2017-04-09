@@ -38,5 +38,6 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^authenticate/', customUsersViews.CustomObtainAuthToken.as_view()),
     url(r'^api-token-auth/', authViews.obtain_auth_token),
+    url(r'^api/customUsers/', include('posts.urls', namespace='customUsers')),
 
 ]
