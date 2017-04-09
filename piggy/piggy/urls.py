@@ -29,6 +29,7 @@ router.register(r'api/posts', postsViews.PostViewSet)
 router.register(r'api/customUsers', customUsersViews.CustomUserViewSet)
 router.register(r'api/requests', postsViews.RequestViewSet)
 router.register(r'api/reviews', postsViews.ReviewViewSet)
+
 admin.autodiscover()
 
 
@@ -39,5 +40,9 @@ urlpatterns = [
     url(r'^authenticate/', customUsersViews.CustomObtainAuthToken.as_view()),
     url(r'^api-token-auth/', authViews.obtain_auth_token),
     url(r'^api/customUsers/', include('posts.urls', namespace='customUsers')),
+    # url(r'^api/filter/q=(?P<query>.*)', include('posts.urls', namespace='customUsers')),
+    # url(r'^api/filter/origin/q=(?P<origin_query>.*)', postsViews.PostViewSet),
+    # url(r'^api/posts/origin/q=(?P<origin_query>.*)', postsViews.PostViewSet),
+    url(r'^api/posts/', include('posts.urls', namespace='posts')),
 
 ]

@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework import generics
+from rest_framework import mixins
 from posts.models import Post
 from posts.models import Request
 from posts.models import Review
@@ -17,6 +18,31 @@ class PostViewSet(viewsets.ModelViewSet):
 
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
+
+class ListCreateOriginPost(generics.ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(origin=self.kwargs.get('origin_query'))
+
+
+class ListCreateDestinationPost(generics.ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(destination=self.kwargs.get('destination_query'))
+
+
+class ListCreateBothPost(generics.ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(origin=self.kwargs.get('origin_query')
+            ).filter(destination=self.kwargs.get('destination_query'))
 
 class RequestViewSet(viewsets.ModelViewSet):
 
