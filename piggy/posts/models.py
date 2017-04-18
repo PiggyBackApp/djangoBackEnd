@@ -31,6 +31,7 @@ class Request(models.Model):
     # TODO: Find a way to check that duplicate requests were not made
     driver = models.ForeignKey('customUsers.CustomUser', related_name='driver')
     passenger = models.ForeignKey('customUsers.CustomUser', related_name='passenger')
+    requester = models.ForeignKey('customUsers.CustomUser', related_name='requester')
     post = models.ForeignKey(Post, related_name='post')
     passengers = models.IntegerField(blank=True, null=True)
     accepted = models.NullBooleanField(default=None)
@@ -46,6 +47,6 @@ class Review(models.Model):
     comment = models.TextField(blank=True, default='')
 
 class ConfirmedRequest(models.Model):
-    post = models.ForeignKey('posts.Post', related_name='confirmed_requests', blank=True, null=True)
+    post = models.ForeignKey('posts.Post', related_name='confirmed_requests')
     request = models.ForeignKey('posts.Request')
     passengers = models.IntegerField(blank=True, null=True)

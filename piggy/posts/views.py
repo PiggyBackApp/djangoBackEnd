@@ -27,7 +27,7 @@ class ListCreateOriginPost(generics.ListCreateAPIView):
     serializer_class = PostSerializer
 
     def get_queryset(self):
-        return self.queryset.filter(origin=self.kwargs.get('origin_query'))
+        return self.queryset.filter(origin=self.kwargs.get('origin_query').replace('_',' '))
 
 
 class ListCreateDestinationPost(generics.ListCreateAPIView):
@@ -35,7 +35,7 @@ class ListCreateDestinationPost(generics.ListCreateAPIView):
     serializer_class = PostSerializer
 
     def get_queryset(self):
-        return self.queryset.filter(destination=self.kwargs.get('destination_query'))
+        return self.queryset.filter(destination=self.kwargs.get('destination_query').replace('_',' '))
 
 
 class ListCreateBothPost(generics.ListCreateAPIView):
@@ -43,8 +43,8 @@ class ListCreateBothPost(generics.ListCreateAPIView):
     serializer_class = PostSerializer
 
     def get_queryset(self):
-        return self.queryset.filter(origin=self.kwargs.get('origin_query')
-            ).filter(destination=self.kwargs.get('destination_query'))
+        return self.queryset.filter(origin=self.kwargs.get('origin_query').replace('_',' ')
+            ).filter(destination=self.kwargs.get('destination_query').replace('_',' '))
 
 class RequestViewSet(viewsets.ModelViewSet):
 
