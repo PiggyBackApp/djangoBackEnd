@@ -22,9 +22,7 @@ class Post(models.Model):
     destination = models.CharField(max_length=255)
     totalPassengers = models.IntegerField(blank=True, null=True)
     passengerCapacity = models.IntegerField(blank=True, null=True)
-    # status = models.CharField(max_length=20,choices=statuses, blank=True)
     travelDate = models.DateTimeField()
-    parent_post = models.ForeignKey('posts.Post', related_name='related_posts', blank=True, null=True)
 
     def __str__(self):
         return CustomUser.objects.get(id=self.creator.id).user.username + ": " + self.origin + " -> " + self.destination
@@ -34,6 +32,10 @@ class Request(models.Model):
     driver = models.ForeignKey('customUsers.CustomUser', related_name='driver')
     passenger = models.ForeignKey('customUsers.CustomUser', related_name='passenger')
     post = models.ForeignKey(Post, related_name='post')
+    passengers = models.IntegerField(blank=True, null=True)
+    accepted = models.NullBooleanField(default=None)
+    # driver_post = models.ForeignKey('posts.Post', related_name='related_requests', blank=True, null=True)
+
 
 class Review(models.Model):
     reviewee = models.ForeignKey('customUsers.CustomUser', related_name='reviews')
@@ -42,3 +44,8 @@ class Review(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     rating = models.IntegerField()
     comment = models.TextField(blank=True, default='')
+
+class ConfirmedRequest(models.Model):
+    post = models.ForeignKey('posts.Post', related_name='confirmed_requests', blank=True, null=True)
+    request = models.ForeignKey('posts.Request')
+    passengers = models.IntegerField(blank=True, null=True)

@@ -29,6 +29,7 @@ router.register(r'api/posts', postsViews.PostViewSet)
 router.register(r'api/customUsers', customUsersViews.CustomUserViewSet)
 router.register(r'api/requests', postsViews.RequestViewSet)
 router.register(r'api/reviews', postsViews.ReviewViewSet)
+router.register(r'api/confirmed_requests', postsViews.ConfirmedRequestViewSet)
 
 admin.autodiscover()
 

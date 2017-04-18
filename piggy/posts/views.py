@@ -8,9 +8,11 @@ from rest_framework import mixins
 from posts.models import Post
 from posts.models import Request
 from posts.models import Review
+from posts.models import ConfirmedRequest
 from customUsers.models import CustomUser
 from posts.serializers import PostSerializer
 from posts.serializers import RequestSerializer
+from posts.serializers import ConfirmedRequestSerializer
 from posts.serializers import ReviewSerializer
 
 # Create your views here.
@@ -83,3 +85,7 @@ class RetrieveUpdateDestroyReview(generics.RetrieveUpdateDestroyAPIView):
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+
+class ConfirmedRequestViewSet(viewsets.ModelViewSet):
+    queryset = ConfirmedRequest.objects.all()
+    serializer_class = ConfirmedRequestSerializer

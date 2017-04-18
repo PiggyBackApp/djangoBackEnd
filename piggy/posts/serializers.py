@@ -1,6 +1,7 @@
 from posts.models import Post
 from posts.models import Request
 from posts.models import Review
+from posts.models import ConfirmedRequest
 from customUsers.models import CustomUser
 from rest_framework import serializers
 from django.db.models import Avg, Max, Min, Sum
@@ -9,7 +10,7 @@ class PostSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField()
     seats_taken = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
-    related_posts = serializers.PrimaryKeyRelatedField(
+    confirmed_requests = serializers.PrimaryKeyRelatedField(
         many=True,
         read_only=True,
     )
@@ -26,15 +27,14 @@ class PostSerializer(serializers.ModelSerializer):
             'origin',
             'destination',
             'totalPassengers',
+            'confirmed_requests',
             'seats_taken',
             'passengerCapacity',
             'status',
             'travelDate',
-            'related_posts',
-            'parent_post',
         )
     def get_status(self, obj):
-        taken = obj.related_posts.aggregate(Sum('totalPassengers')).get('totalPassengers__sum')
+        taken = obj.confirmed_requests.aggregate(Sum('passengers')).get('passengers__sum')
         if taken is None:
             return 'A'
 
@@ -44,7 +44,7 @@ class PostSerializer(serializers.ModelSerializer):
         return 'A'
 
     def get_seats_taken(self, obj):
-        taken = obj.related_posts.aggregate(Sum('totalPassengers')).get('totalPassengers__sum')
+        taken = obj.confirmed_requests.aggregate(Sum('passengers')).get('passengers__sum')
         if taken is None:
             return 0
         return taken
@@ -73,7 +73,9 @@ class RequestSerializer(serializers.ModelSerializer):
             'passenger_username',
             'origin',
             'destination',
-            'travelDate'
+            'travelDate',
+            'passengers',
+            'accepted',
         )
 
     def get_driver_username(self, obj):
@@ -108,4 +110,19 @@ class ReviewSerializer(serializers.ModelSerializer):
             'created_at',
             'rating',
             'comment'
+        )
+
+# class ConfirmedRequest(models.Model):
+    # post = models.ForeignKey('posts.Post', related_name='confirmed_requests', blank=True, null=True)
+    # request = models.ForeignKey('posts.Request')
+    # passengers = models.IntegerField(blank=True, null=True)
+
+class ConfirmedRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ConfirmedRequest
+        fields = (
+            'id',
+            'post',
+            'request',
+            'passengers',
         )
