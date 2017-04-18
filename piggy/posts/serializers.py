@@ -31,6 +31,7 @@ class PostSerializer(serializers.ModelSerializer):
             'status',
             'travelDate',
             'related_posts',
+            'parent_post',
         )
     def get_status(self, obj):
         taken = obj.related_posts.aggregate(Sum('totalPassengers')).get('totalPassengers__sum')
@@ -39,7 +40,7 @@ class PostSerializer(serializers.ModelSerializer):
 
         if taken >= obj.passengerCapacity:
             return 'F'
-            
+
         return 'A'
 
     def get_seats_taken(self, obj):
