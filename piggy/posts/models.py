@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from customUsers.models import CustomUser
 
 # Create your models here.
 class Post(models.Model):
@@ -19,15 +20,14 @@ class Post(models.Model):
     creator = models.ForeignKey('customUsers.CustomUser')
     origin = models.CharField(max_length=255)
     destination = models.CharField(max_length=255)
-    emptySeats = models.IntegerField(blank=True, null=True)
+    totalPassengers = models.IntegerField(blank=True, null=True)
     passengerCapacity = models.IntegerField(blank=True, null=True)
-    status = models.CharField(max_length=20,choices=statuses, blank=True)
+    # status = models.CharField(max_length=20,choices=statuses, blank=True)
     travelDate = models.DateTimeField()
-
+    parent_post = models.ForeignKey('posts.Post', related_name='related_posts', blank=True, null=True)
 
     def __str__(self):
-        return self.title
-
+        return CustomUser.objects.get(id=self.creator.id).user.username + ": " + self.origin + " -> " + self.destination
 
 class Request(models.Model):
     # TODO: Find a way to check that duplicate requests were not made

@@ -3,9 +3,16 @@ from posts.models import Request
 from posts.models import Review
 from customUsers.models import CustomUser
 from rest_framework import serializers
+from django.db.models import Avg, Max, Min, Sum
 
 class PostSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField()
+    seats_taken = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField()
+    related_posts = serializers.PrimaryKeyRelatedField(
+        many=True,
+        read_only=True,
+    )
     class Meta:
         model = Post
         fields = (
@@ -18,11 +25,29 @@ class PostSerializer(serializers.ModelSerializer):
             'postType',
             'origin',
             'destination',
-            'emptySeats',
+            'totalPassengers',
+            'seats_taken',
             'passengerCapacity',
             'status',
-            'travelDate'
+            'travelDate',
+            'related_posts',
         )
+    def get_status(self, obj):
+        taken = obj.related_posts.aggregate(Sum('totalPassengers')).get('totalPassengers__sum')
+        if taken is None:
+            return 'A'
+
+        if taken >= obj.passengerCapacity:
+            return 'F'
+            
+        return 'A'
+
+    def get_seats_taken(self, obj):
+        taken = obj.related_posts.aggregate(Sum('totalPassengers')).get('totalPassengers__sum')
+        if taken is None:
+            return 0
+        return taken
+
     def get_username(self, obj):
         # user = obj.reviews.aggregate(Avg('rating')).get('rating__avg')
         user = CustomUser.objects.get(id=obj.creator.id)
@@ -49,7 +74,7 @@ class RequestSerializer(serializers.ModelSerializer):
             'destination',
             'travelDate'
         )
-        
+
     def get_driver_username(self, obj):
         user = CustomUser.objects.get(id=obj.driver.id)
         return user.user.username
