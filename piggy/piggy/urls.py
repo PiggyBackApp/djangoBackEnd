@@ -45,5 +45,6 @@ urlpatterns = [
     # url(r'^api/filter/origin/q=(?P<origin_query>.*)', postsViews.PostViewSet),
     # url(r'^api/posts/origin/q=(?P<origin_query>.*)', postsViews.PostViewSet),
     url(r'^api/posts/', include('posts.urls', namespace='posts')),
+    url(r'^api/selfposts/', postsViews.OwnPostsViewSet.as_view({'get': 'list'})),
 
 ]

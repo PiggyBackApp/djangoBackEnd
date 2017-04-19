@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^origin/q=(?P<origin_query>.*)/$', views.ListCreateOriginPost.as_view()),
     url(r'^destination/q=(?P<destination_query>.*)/$', views.ListCreateDestinationPost.as_view()),
     url(r'^both/q=(?P<origin_query>.*)/q=(?P<destination_query>.*)/$', views.ListCreateBothPost.as_view()),
+    url(r'^self/$', views.OwnPostsViewSet, name='post_list'),
 
 
 ]

@@ -21,6 +21,15 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
+class OwnPostsViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        user = self.request.user.id
+        c_user_id = CustomUser.objects.get(user=user).id
+        posts_ret = Post.objects.all().filter(creator=c_user_id).exclude(postType='PA')
+        return posts_ret
 
 class ListCreateOriginPost(generics.ListCreateAPIView):
     queryset = Post.objects.all()
