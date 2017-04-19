@@ -76,6 +76,7 @@ class RequestSerializer(serializers.ModelSerializer):
             'travelDate',
             'passengers',
             'accepted',
+            'requester'
         )
 
     def get_driver_username(self, obj):
